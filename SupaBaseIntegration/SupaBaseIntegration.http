@@ -1,0 +1,272 @@
+@SupaBaseIntegration_HostAddress = https://localhost:7299
+@token = eyJhbGciOiJIUzI1NiIsImtpZCI6Ikt3Wm1PcXRVdm5vTUlmWGMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2lvY2tlYXNldHVua3JmYnJ2YmVqLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiIxNDY5ZjAyZC1mOTUxLTQ4NmItYmUxYy1jZTc5NzJmOTY3NjciLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzU3MzM1Mjk2LCJpYXQiOjE3NTczMzE2OTYsImVtYWlsIjoibmV3dXNlckBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoibmV3dXNlckBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGhvbmVfdmVyaWZpZWQiOmZhbHNlLCJzdWIiOiIxNDY5ZjAyZC1mOTUxLTQ4NmItYmUxYy1jZTc5NzJmOTY3NjcifSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc1NzMzMTY5Nn1dLCJzZXNzaW9uX2lkIjoiNTA2MTdiZTAtYzlkYy00NDg1LWE2ZjYtNjQwODM3YjQ4NDQ4IiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.JkthXW_nDD5BkXprZTHSIM9Gkz_HP_Ti7EJ1Wlwjar0
+@refresh_token = your-refresh-token-here
+
+### ===========================================
+### HEALTH CHECK & SYSTEM
+### ===========================================
+
+### Check API Health
+GET {{SupaBaseIntegration_HostAddress}}/health
+
+### ===========================================
+### BASIC AUTHENTICATION TESTS
+### ===========================================
+
+### 1. Sign Up New User
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "newuser@gmail.com",
+  "password": "SecurePassword123!",
+  ""
+}
+
+### 2. Sign In Existing User
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "newuser@gmail.com",
+  "password": "SecurePassword123!"
+}
+
+### 3. Get Current User Profile
+GET {{SupaBaseIntegration_HostAddress}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### 4. Sign Out User
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signout
+Authorization: Bearer {{token}}
+
+### ===========================================
+### MAGIC LINK AUTHENTICATION TESTS
+### ===========================================
+
+### 5. Send Magic Link to Email
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/magiclink
+Content-Type: application/json
+
+{
+  "email": "zeyadabdelnaby15@gmail.com",
+  "redirectTo": "http://localhost:3000/auth/callback"
+}
+
+### 6. Send Magic Link to Email (No Redirect) not worked after test 
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/magiclink
+Content-Type: application/json
+
+{
+  "email": "zeyadabdelnaby15@gmail.com"
+}
+
+### 7. Send OTP to Phone
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/magiclink
+Content-Type: application/json
+
+{
+  "phone": "+201099176238",
+  "redirectTo": "http://localhost:3000/auth/callback"
+}
+
+### 8. Verify Email Magic Link/OTP
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/verify
+Content-Type: application/json
+
+{
+  "email": "zeyadabdelnaby15@gmail.com",
+  "token": "123456"
+}
+
+### 9. Verify Phone OTP
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/verify
+Content-Type: application/json
+
+{
+  "phone": "+1234567890",
+  "token": "123456"
+}
+
+### ===========================================
+### OAUTH PROVIDER TESTS
+### ===========================================
+
+### 10. Get All Available OAuth Providers
+GET {{SupaBaseIntegration_HostAddress}}/api/auth/providers
+
+### 11. GitHub OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/github
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["user:email", "read:user"],
+  "queryParams": {
+    "prompt": "consent",
+    "access_type": "offline"
+  }
+}
+
+### 12. Google OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/google
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["openid", "email", "profile"],
+  "queryParams": {
+    "prompt": "consent"
+  }
+}
+
+### 13. Discord OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/discord
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["identify", "email"]
+}
+
+### 14. Twitter OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/twitter
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback"
+}
+
+### 15. Facebook OAuth Sign In  
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/facebook
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["email", "public_profile"]
+}
+
+### 16. Apple OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/apple
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["name", "email"]
+}
+
+### 17. Microsoft/Azure OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/azure
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["openid", "profile", "email"]
+}
+
+### 18. LinkedIn OAuth Sign In
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/linkedin
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback",
+  "scopes": ["r_liteprofile", "r_emailaddress"]
+}
+
+### 19. Handle OAuth Callback
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/callback/oauth
+Content-Type: application/json
+
+{
+  "accessToken": "oauth-access-token-from-provider",
+  "refreshToken": "oauth-refresh-token-from-provider"
+}
+
+### ===========================================
+### SESSION MANAGEMENT TESTS
+### ===========================================
+
+### 20. Refresh Session Token
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh_token}}"
+}
+
+### 21. Validate Access Token
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/validate
+Content-Type: application/json
+
+{
+  "token": "{{token}}"
+}
+
+### ===========================================
+### PROTECTED ENDPOINT TESTS
+### ===========================================
+
+### 22. Access Protected Weather Forecast
+GET {{SupaBaseIntegration_HostAddress}}/weatherforecast
+Authorization: Bearer {{token}}
+
+### ===========================================
+### ERROR HANDLING TESTS
+### ===========================================
+
+### 23. Test Invalid Email Format
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "password123"
+}
+
+### 24. Test Short Password
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123"
+}
+
+### 25. Test Invalid Phone Format
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/magiclink
+Content-Type: application/json
+
+{
+  "phone": "invalid-phone-number"
+}
+
+### 26. Test Unsupported OAuth Provider
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin/oauth/unsupported
+Content-Type: application/json
+
+{
+  "redirectTo": "http://localhost:3000/auth/callback"
+}
+
+### 27. Test Missing Authorization Header
+GET {{SupaBaseIntegration_HostAddress}}/api/auth/me
+
+### 28. Test Invalid Token
+GET {{SupaBaseIntegration_HostAddress}}/api/auth/me
+Authorization: Bearer invalid-token-here
+
+### ===========================================
+### LOAD TESTING EXAMPLES
+### ===========================================
+
+### 29. Multiple Sign In Requests (Run multiple times)
+POST {{SupaBaseIntegration_HostAddress}}/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "zeyadabdelnaby15@gmail.com",
+  "password": "52173965"
+}
+
+### 30. Multiple Provider Requests
+GET {{SupaBaseIntegration_HostAddress}}/api/auth/providers
