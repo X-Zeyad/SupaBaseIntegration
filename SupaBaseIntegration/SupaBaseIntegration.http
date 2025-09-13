@@ -270,3 +270,37 @@ Content-Type: application/json
 
 ### 30. Multiple Provider Requests
 GET {{SupaBaseIntegration_HostAddress}}/api/auth/providers
+
+### 31. Get videos
+GET {{SupaBaseIntegration_HostAddress}}/api/videos
+### 32. Get video by id
+GET {{SupaBaseIntegration_HostAddress}}/api/videos/2b33bd6355cc4a9e9145effce4adc3db
+### 33. Create new video
+POST {{SupaBaseIntegration_HostAddress}}/api/videos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "title": "New Video",
+  "description": "This is a new video.",
+  "url": "http://example.com/new-video"
+}
+### 34. Update video by id
+PUT {{SupaBaseIntegration_HostAddress}}/api/videos/2b33bd6355cc4a9e9145effce4adc3db
+Content-Type: application/json
+{
+  "title": "Updated Video Title",
+  "description": "Updated description.",
+  "url": "http://example.com/updated-video"
+}
+### 35. Delete video by id
+DELETE {{SupaBaseIntegration_HostAddress}}/api/videos/2b33bd6355cc4a9e9145effce4adc3db
+
+### 36. Generate Otp
+Post {{SupaBaseIntegration_HostAddress}}/api/Videos/otp
+Content-Type: application/json
+{
+   "videoId" : "1234567890",
+   "ttl" :300
+}
+### 37. check config 
+GET {{SupaBaseIntegration_HostAddress}}/api/Videos/config-check

@@ -1,7 +1,10 @@
 
 using Microsoft.IdentityModel.Tokens;
 using Supabase;
+using SupaBaseIntegration.Dtos.Vdocipher;
+using SupaBaseIntegration.Extemsions;
 using SupaBaseIntegration.Services;
+using SupaBaseIntegration.Services.VdoCipher;
 using System.Text;
 
 
@@ -34,7 +37,14 @@ namespace SupaBaseIntegration
             });
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IProviderService, ProviderService>();
-
+            builder.Services.AddVdoCipher(builder.Configuration);
+            builder.Services.AddHttpClient<VdoCipherService>((sp, client) =>
+            {
+                var config = sp.GetRequiredService<VdoCipherConfig>();
+                client.BaseAddress = new Uri(config.BaseUrl);
+                client.DefaultRequestHeaders.Add("Authorization", $"Apisecret {config.ApiSecret}");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
             builder.Services.AddControllers();
 
             builder.Services.AddOpenApi();
